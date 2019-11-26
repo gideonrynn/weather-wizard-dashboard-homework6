@@ -1,3 +1,7 @@
+.container {
+    max-width: 100%;
+}
+
 .navbar-header {
     color: #ffffff;
 }
@@ -6,7 +10,7 @@ h4 {
     color: whitesmoke;
 }
 
-.sidebar {
+/* .sidebar {
     width: 250px;
     position: fixed;
     left: 0;
@@ -15,4 +19,8 @@ h4 {
     background: whitesmoke;
     color: black;
     transition: all 0.3s;
+} */
+
+.list-group {
+    width: 100%;
 }

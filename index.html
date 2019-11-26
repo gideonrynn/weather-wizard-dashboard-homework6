@@ -25,30 +25,127 @@
   <body background="assets/images/weather.png">
 
     <!-- fixed top forces navbar over everything -->
-    <nav class="navbar navbar-light fixed-top justify-content-around top-nav" style="background-color: #600060;">
+    <nav class="navbar navbar-light justify-content-around top-nav" style="background-color: #600060;">
         
         <a class="navbar-brand navbar-header"><h4>Weather Wizard Dashboard</h4></a>
 
     </nav>
 
-    <nav class="d-none d-md-block sidebar">
+    <!-- Start Sidebar ***which disappears when the window reaches small***  -->
+  
+    <div class="container">
+        <!-- overall row -->
 
-        <div class="sidebar-sticky mx-2 my-2 d-flex align-items-center">
+        <div class="row">
 
-            <form class="form-inline">
+            <div class="col-3" style="background: #ffffff; height: 100vh">
 
-                <label>Search for a City</label>
+                <form class="form">
 
-                <input class="form-control mt-2" type="search" placeholder="">
-        
-                <button class="btn btn-primary" type="submit">Search</button>
+                    <div class="input-group">
+                    
+                        <label>Search for a City</label>
+            
+                        <input class="form-control" type="search" placeholder="">
+                        
+                        <span class="fas fa-search-location form-control-feedback"></span>
 
-            </form>
+                    </div>
+                    
+                    <div class="card search mx-auto">
+            
+                        <ul class="list-group list-group-flush">
 
-          </div>
+                            <li class="list-group-item">Cras justo odio</li>
+                            <li class="list-group-item">Dapibus ac facilisis in</li>
+                            <li class="list-group-item">Vestibulum at eros</li>
 
-        </nav>
+                        </ul>
+            
+                    </div>
+
+              
+            
+                </form>
+
+
+            </div>
+
+            <div class="col-9">
+
+                <div class="row">
+
+                    <div class="col-12 my-2">
+                
+                        <div class="card">
+
+                            <div class="card-body">
+
+                              <h5 class="card-title">Card title</h5>
+                              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                              <a href="#" class="btn btn-primary">Button</a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    
+                        <div class="col-12 my-2">
+                    
+                            <div class="card">
+                                <div class="card-body">
+                                  <h5 class="card-title">Card title</h5>
+                                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                  <a href="#" class="btn btn-primary">Button</a>
+                                </div>
+                            </div>
     
+                        </div>
+    
+                    </div>
+
+
+
+            </div>
+
+         <!--overall row end  -->
+        </div>
+    
+    <!-- container end -->
+    </div>
+
+
+    <!-- <nav class="d-none d-md-block sidebar">
+
+            <div class="sidebar-sticky mx-2 my-2 d-flex align-items-center">
+    
+                <form class="form-inline mx-auto">
+                    
+                    <label>Search for a City</label>
+    
+                    <input class="form-control" type="search" placeholder="">
+                    <span class="fas fa-search-location form-control-feedback"></span>
+            
+                    <div class="card search mx-auto">
+    
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Cras justo odio</li>
+                            <li class="list-group-item">Dapibus ac facilisis in</li>
+                            <li class="list-group-item">Vestibulum at eros</li>
+                        </ul>
+    
+                    </div>
+    
+                </form>
+    
+              </div>
+    
+        </nav> -->
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
