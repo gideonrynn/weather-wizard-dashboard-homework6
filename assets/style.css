@@ -1,0 +1,18 @@
+.navbar-header {
+    color: #ffffff;
+}
+
+h4 {
+    color: whitesmoke;
+}
+
+.sidebar {
+    width: 250px;
+    position: fixed;
+    left: 0;
+    margin-top: 62px;
+    height: 100vh;
+    background: whitesmoke;
+    color: black;
+    transition: all 0.3s;
+}
