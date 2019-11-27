@@ -34,9 +34,13 @@ cityDetails.append(cityName, cityTemp, cityHumid, cityWindSpeed, cityUV);
  // This is our API key
     var APIKey = "3ccebe214d7b6f05e838f63e5034dcde";
 
-    // Set url that will query the database
+    // Set url that will query the database. default is chicago
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
       "Chicago" + "&units=imperial&appid=" + APIKey;
+
+
+    //create function that will run ajax call and update city details
+    function runQuery () {
 
     // Here we run our AJAX call to the OpenWeatherMap API (defined by queryURL)
     $.ajax({
@@ -51,14 +55,14 @@ cityDetails.append(cityName, cityTemp, cityHumid, cityWindSpeed, cityUV);
         cityWindSpeed.text("Wind Speed: " + response.wind.speed);
         cityHumid.text("Humidity: " + response.main.humidity);
         cityTemp.text("Temperature (F) " + response.main.temp);
-        
-        
 
         // Converts the temp to Kelvin with the below formula
         var tempF = (response.main.temp - 273.15) * 1.80 + 32;
         $(".tempF").text("Temperature (Kelvin) " + tempF);
 
     });
+
+}
 
         // cityUV.text("UV Index " + response.)
 
@@ -95,8 +99,8 @@ cityDetails.append(cityName, cityTemp, cityHumid, cityWindSpeed, cityUV);
            
             $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
 
-            
-
         }
+    )};
 
-                )};
+//at start, the run ajax call that will display city details
+runQuery ();
