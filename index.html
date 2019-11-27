@@ -40,15 +40,15 @@
 
             <div class="col-3" style="background: #ffffff; height: 100vh">
 
-                <form class="form">
+                <form class="form-group">
 
-                    <div class="input-group">
+                    <div class="input-group m-6">
                     
                         <label>Search for a City</label>
             
-                        <input class="form-control" type="search" placeholder="">
+                        <input class="form-control" type="search" placeholder="" id="search">
+                        <button class="btn btn-primary submit-button" type="submit"><span class="fas fa-search-location form-control-feedback"></span></button>
                         
-                        <span class="fas fa-search-location form-control-feedback"></span>
 
                     </div>
                     
@@ -79,11 +79,13 @@
                 
                         <div class="card">
 
-                            <div class="card-body">
+                            <div class="card-body city-details">
 
-                              <h5 class="card-title">Card title</h5>
-                              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                              <a href="#" class="btn btn-primary">Button</a>
+                              <h5 class="card-title city">Card title</h5>
+                              <div class="card-text temperature"></div>
+                              <div class="card-text humidity"></div>
+                              <div class="card-text wind-speed"></div>
+                              <div class="card-text uv-index"></div>
 
                             </div>
 
@@ -98,11 +100,7 @@
                         <div class="col-12 my-2">
                     
                             <div class="card">
-                                <div class="card-body">
-                                  <h5 class="card-title">Card title</h5>
-                                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                  <a href="#" class="btn btn-primary">Button</a>
-                                </div>
+                                
                             </div>
     
                         </div>
