@@ -1,9 +1,21 @@
+ 
+ /////////////////////
+ //Creating elements//
+ ////////////////////
+ 
+ 
+ 
+ ///////////////////
+ ///////API calls////
+ ///////////////////
+ 
+ 
  // This is our API key
     var APIKey = "3ccebe214d7b6f05e838f63e5034dcde";
 
     // Here we are building the URL we need to query the database
-    var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
-      "q=Bujumbura,Burundi&units=imperial&appid=" + APIKey;
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
+      "Chicago" + "&units=imperial&appid=" + APIKey;
 
     // Here we run our AJAX call to the OpenWeatherMap API
     $.ajax({
@@ -39,10 +51,16 @@
         submitBtn.on("click", searchCity);
 
         function searchCity () {
-            var searchInput = $('#search').val();
-            console.log(searchInput);
-            $('.city').html(searchInput);
-            $('.list-group').append('<li class=list-group-item>' + searchInput + '</li>');
+          
+            var citySearch = $('#search').val();
+
+            console.log(citySearch);
+            $('.city').html(citySearch);
+            $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
+
+            queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
+            citySearch + "&units=imperial&appid=" + APIKey;
+
         }
 
       });
