@@ -38,21 +38,24 @@
 
         <div class="row">
 
+            <!-- create "sidebar" column that will span the heigh of the viewport -->
             <div class="col-3" style="background: #ffffff; height: 100vh">
 
-                <form class="form-group">
+                <form class="form-group sidebar">
                     
-                    <label class="m-6">Search for a City</label>
+                    <label class="m-6" style="font-weight: bold">Search for a City</label>
 
-                    <div class="input-group">
+                    <div class="input-group search-button-group">
             
                         <input class="form-control" type="search" placeholder="" id="search">
                         <button class="btn btn-primary submit-button" type="submit"><span class="fas fa-search-location form-control-feedback"></span></button>
                     
                     </div>
+
                     
+                    <p class= mt-3 style=font-weight:bold>Previous Searches</p>
                     <div class="card search mx-auto">
-            
+
                         <ul class="list-group list-group-flush">
 
                         </ul>
@@ -74,11 +77,7 @@
 
                             <div class="card-body city-details">
 
-                              <h5 class="card-title city">Card title</h5>
-                              <div class="card-text temperature"></div>
-                              <div class="card-text humidity"></div>
-                              <div class="card-text wind-speed"></div>
-                              <div class="card-text uv-index"></div>
+
 
                             </div>
 
@@ -90,17 +89,19 @@
 
                 <div class="row">
                     
-                        <div class="col-12 my-2">
+                    <div class="col-12 my-2">
                     
-                            <div class="card">
-                                
+                        <div class="card">
+
+                            <div class="card-body city-forecast">
+
                             </div>
-    
+                                
                         </div>
     
                     </div>
-
-
+    
+                </div>
 
             </div>
 
