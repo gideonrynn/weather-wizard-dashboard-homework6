@@ -41,7 +41,7 @@
         function searchCity () {
             var searchInput = $('#search').val();
             console.log(searchInput);
-            $(".city").html(searchInput);
+            $('.city').html(searchInput);
             $('.list-group').append('<li class=list-group-item>' + searchInput + '</li>');
         }
 
