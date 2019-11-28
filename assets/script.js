@@ -39,6 +39,29 @@ cityDetails.append(cityName, cityTemp, cityHumid, cityWindSpeed, cityUV);
       "Chicago" + "&units=imperial&appid=" + APIKey;
 
 
+      // cityUV.text("UV Index " + response.)
+
+        //when the Submit Button is clicked, run a query that ***adds the city name searched to the 
+        var submitBtn = $(".submit-button");
+        submitBtn.on("click", searchCity);
+
+        function searchCity () {
+          
+          event.preventDefault();
+          
+            var citySearch = $('#search').val();
+            console.log(citySearch);
+
+            queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
+            citySearch + "&units=imperial&appid=" + APIKey;
+
+            runQuery ();
+
+            $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
+
+
+        }
+
     //create function that will run ajax call and update city details
     function runQuery () {
 
@@ -64,43 +87,7 @@ cityDetails.append(cityName, cityTemp, cityHumid, cityWindSpeed, cityUV);
 
 }
 
-        // cityUV.text("UV Index " + response.)
+runQuery ();
 
-        //when the Submit Button is clicked, run a query that ***adds the city name searched to the 
-        var submitBtn = $(".submit-button");
-        submitBtn.on("click", searchCity);
-
-        function searchCity () {
-          
-            var citySearch = $('#search').val();
-            console.log(citySearch);
-
-            queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
-            citySearch + "&units=imperial&appid=" + APIKey;
-
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-              })
-                // We store all of the retrieved data inside of an object called "response"
-                .then(function(response) {
-
-
-            // Transfer content to HTML
-            cityName.html("<h1>" + response.name);
-            cityWindSpeed.text("Wind Speed: " + response.wind.speed);
-            cityHumid.text("Humidity: " + response.main.humidity);
-            cityTemp.text("Temperature (F) " + response.main.temp);
-
-
-            // Converts the temp to Kelvin with the below formula
-            var tempF = (response.main.temp - 273.15) * 1.80 + 32;
-            $(".tempF").text("Temperature (Kelvin) " + tempF);
-           
-            $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
-
-        }
-    )};
 
 //at start, the run ajax call that will display city details
-runQuery ();
