@@ -25,7 +25,7 @@ var cityUV = $('<div class=uv-index>');
 cityDetails.append(cityName, cityTemp, cityHumid, cityWindSpeed, cityUV);
 
 
-var fiveDayCityForecast = $('.city-forecast');
+var fiveDayCityForecast = $('.card-group');
 
 
  
@@ -111,7 +111,6 @@ var fiveDayCityForecast = $('.city-forecast');
 
 
 
-var fiveDayContainer = $('<div class=five-container>');
 
 function runForecastQuery () {
 
@@ -127,6 +126,7 @@ function runForecastQuery () {
 
       //works when each of the list items contains an i, along with container and variables - also 
      for (var i = 0; i < 5; i++) {
+      var fiveDayContainer = $('<div class=card>').append('<div class=card-body');
 
       var fiveDayTime = $('<div class=card-text id=five-date>');
 
@@ -170,6 +170,8 @@ function runUVQuery () {
   });
 
 }
+
+
 
 
 
