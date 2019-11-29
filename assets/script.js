@@ -16,9 +16,7 @@
 //  $('.search-button-group').append(searchInputDiv, searchInputButton);
 
 var cityDetails = $('.city-details');
-console.log(cityDetails)
 var cityName = $('<h5 class=city-name></h5>');
-console.log(cityName);
 var cityTemp = $('<div class=temp>');
 var cityHumid = $('<div class=humidity>');
 var cityWindSpeed = $('<div class=wind-speed>');
@@ -29,7 +27,7 @@ cityDetails.append(cityName, cityTemp, cityHumid, cityWindSpeed, cityUV);
 
 var fiveDayCityForecast = $('.city-forecast');
 
-var citySearch = $('#search').val();
+
  
  ///////////////////
  ///////API calls////
@@ -43,7 +41,10 @@ var citySearch = $('#search').val();
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
       "Chicago" + "&units=imperial&appid=" + APIKey;
 
+    var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?&appid=3ccebe214d7b6f05e838f63e5034dcde&lat=37.75&lon=-122.37";
+
     console.log(queryURL);
+    console.log(queryUvURL);
 
     // Set url that will query the database. default is chicago
     var queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + "Chicago" + "&units=imperial&appid=" + APIKey;
@@ -61,7 +62,7 @@ var citySearch = $('#search').val();
           
           //prevent button from triggering default page refresh
           event.preventDefault();
-          
+          var citySearch = $('#search').val();
             
             console.log(citySearch);
 
@@ -132,10 +133,12 @@ function runForecastQuery () {
 
       var fiveDayHumid = $('<div class=card-text id=five-humid>');
 
-      // Transfer content to HTML
+      // Transfer data pulled from forecast API into div
       fiveDayTime.html(forecast.list[i].dt_txt);
       fiveDayTemp.text("Temperature (F) " + forecast.list[i].main.temp);
       fiveDayHumid.text("Humidity: " + forecast.list[i].main.humidity + "%");
+
+      
 
       
       fiveDayCityForecast.append(fiveDayContainer);
