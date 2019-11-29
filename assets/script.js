@@ -35,19 +35,19 @@ var fiveDayCityForecast = $('.city-forecast');
  
  //The below will display by default based on Chicago data
  // This is our API key
-    var APIKey = "3ccebe214d7b6f05e838f63e5034dcde";
+    var APIKey = "&appid=3ccebe214d7b6f05e838f63e5034dcde";
 
     // Set url that will query the database. default is chicago
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
-      "Chicago" + "&units=imperial&appid=" + APIKey;
+      "Chicago" + "&units=imperial" + APIKey;
 
-    var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?&appid=3ccebe214d7b6f05e838f63e5034dcde&lat=37.75&lon=-122.37";
+    var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=37.75&lon=-122.37";
 
     console.log(queryURL);
     console.log(queryUvURL);
 
     // Set url that will query the database. default is chicago
-    var queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + "Chicago" + "&units=imperial&appid=" + APIKey;
+    var queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + "Chicago" + "&units=imperial" + APIKey;
 
     console.log("This is the 5 day Forecast " + queryForecastURL);
 
@@ -67,9 +67,9 @@ var fiveDayCityForecast = $('.city-forecast');
             console.log(citySearch);
 
             queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
-            citySearch + "&units=imperial&appid=" + APIKey;
+            citySearch + "&units=imperial" + APIKey;
 
-            queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&units=imperial&appid=" + APIKey;
+            queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&units=imperial" + APIKey;
 
             runQuery ();
             runForecastQuery ();
@@ -138,9 +138,6 @@ function runForecastQuery () {
       fiveDayTemp.text("Temperature (F) " + forecast.list[i].main.temp);
       fiveDayHumid.text("Humidity: " + forecast.list[i].main.humidity + "%");
 
-      
-
-      
       fiveDayCityForecast.append(fiveDayContainer);
       fiveDayContainer.append(fiveDayTime, fiveDayTemp, fiveDayHumid);
 
