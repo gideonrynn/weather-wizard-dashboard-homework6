@@ -21,6 +21,7 @@ var cityTemp = $('<div class=temp>');
 var cityHumid = $('<div class=humidity>');
 var cityWindSpeed = $('<div class=wind-speed>');
 var cityUV = $('<div class=uv-index>');
+var citySearchUV = "";
 
 cityDetails.append(cityName, cityTemp, cityHumid, cityWindSpeed, cityUV);
 
@@ -45,32 +46,58 @@ var fiveDayCityForecast = $('.card-group');
 
     var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=37.75&lon=-122.37";
 
-    console.log(queryURL);
-    console.log(queryUvURL);
-
-    
-
 
       // cityUV.text("UV Index " + response.)
 
+      var cityLat = "";
+      var cityLon = "";
+
         //when the Submit Button is clicked, run a query that ***adds the city name searched to the 
         var submitBtn = $(".submit-button");
+
         submitBtn.on("click", searchCity);
+        
+        // get the latitude and longitude of the city being searched
+        function getLatLon () {
+          
+          $.ajax({
+            url: queryURL,
+            method: "GET"
+          })
+          // We store all of the retrieved data inside of an object called "response"
+          .then(function(response) {
+    
+            console.log(response);
+
+            cityLat = response.coord.lat;
+            cityLon = response.coord.lon;
+
+            console.log("City Latitude = " + cityLat);
+            console.log("City Longitude = " + cityLon);
+    
+          //close .then function (response) for ajax call
+          });
+        }
 
         function searchCity () {
-          
+
+          fiveDayCityForecast.empty();
+
           //prevent button from triggering default page refresh
           event.preventDefault();
           var citySearch = $('#search').val();
+         
+          // var citySearchUV = citySearch.text("&lat=" + response.coord.lat + "&lon=" + response.coord.lon);
             
-            console.log(citySearch);
 
             queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
             citySearch + "&units=imperial" + APIKey;
 
             queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&units=imperial" + APIKey;
 
-            // queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=37.75&lon=-122.37";
+            getLatLon ();
+
+            queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=" + cityLat + "&lon=" + cityLon;
 
             runQuery ();
             runForecastQuery ();
@@ -83,7 +110,7 @@ var fiveDayCityForecast = $('.card-group');
     //create function that will run ajax call and update city details
     function runQuery () {
 
-      // Here we run our AJAX call to the OpenWeatherMap API (defined by queryURL)
+      // Run AJAX call for current weather for city using OpenWeatherMap API
       $.ajax({
       url: queryURL,
       method: "GET"
@@ -91,7 +118,6 @@ var fiveDayCityForecast = $('.card-group');
       // We store all of the retrieved data inside of an object called "response"
       .then(function(response) {
 
-        console.log("This is the first query response " + response);
         // Transfer content to HTML
         cityName.html("<h1>" + response.name);
         cityWindSpeed.text("Wind Speed: " + response.wind.speed + " MPH");
@@ -105,16 +131,25 @@ var fiveDayCityForecast = $('.card-group');
       //close .then function (response) for ajax call
       });
 
+      // Run AJAX call for current UV for city using OpenWeatherMap API
+      $.ajax({
+        url: queryUvURL,
+        method: "GET"
+      })
+      // We store all of the retrieved data inside of an object called "response"
+      .then(function(response) {
+
+        cityUV.html("UV Index: " + response.value);
+
+      //close .then function (response) for ajax call
+      });
+
       //close runQuery function
     }
 
 
-
-
-
 function runForecastQuery () {
 
- 
     $.ajax({
       url: queryForecastURL,
       method: "GET"
@@ -122,11 +157,11 @@ function runForecastQuery () {
     // We store all of the retrieved data inside of an object called "response"
     .then(function(forecast) {
 
-      console.log(forecast);
-
       //works when each of the list items contains an i, along with container and variables - also 
      for (var i = 0; i < 5; i++) {
-      var fiveDayContainer = $('<div class=card>').append('<div class=card-body');
+      var fiveDayContainer = $('<div class=card>');
+
+      var fiveDayBody = $('<div class=card-body id=five-day>'); 
 
       var fiveDayTime = $('<div class=card-text id=five-date>');
 
@@ -140,42 +175,32 @@ function runForecastQuery () {
       fiveDayHumid.text("Humidity: " + forecast.list[i].main.humidity + "%");
 
       fiveDayCityForecast.append(fiveDayContainer);
-      fiveDayContainer.append(fiveDayTime, fiveDayTemp, fiveDayHumid);
+      fiveDayContainer.append(fiveDayBody);
+      fiveDayBody.append(fiveDayTime, fiveDayTemp, fiveDayHumid);
 
       // // Converts the temp to Kelvin with the below formula
       // var tempF = (forecast.list[i].main.temp - 273.15) * 1.80 + 32;
       // $(".tempF").text("Temperature (Kelvin) " + tempF);
-
-      console.log('done');
     }
 
-  });
-  
-
-}
-
-function runUVQuery () {
-
-  $.ajax({
-    url: queryUvURL,
-    method: "GET"
-  })
-  // We store all of the retrieved data inside of an object called "response"
-  .then(function(response) {
-
-    console.log(response);
-
-    cityUV.html("UV Index: " + response.value);
-
+    //close ajax call
   });
 
+  //**may eventually add UV to each of the cards**
+  //   $.ajax({
+  //     url: queryForecastURL,
+  //     method: "GET"
+  //   })
+  //   // We store all of the retrieved data inside of an object called "response"
+  //   .then(function(forecast) {
+
+  //     var fiveDayContainer = $('<div class=card>').append('<div class=card-body');
+
+  //  });
+
 }
-
-
-
 
 
 //at start, the run ajax call that will display city current details and forecast details
 runQuery ();
 runForecastQuery ();
-runUVQuery ();

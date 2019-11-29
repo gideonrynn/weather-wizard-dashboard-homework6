@@ -2,10 +2,10 @@
     max-width: 100%;
 }
 
-
-.five-container {
+#five-day {
     color: whitesmoke;
     background-color: #66c2ff;
+    padding: 2px;
 }
 
 .navbar-header {
