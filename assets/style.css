@@ -2,10 +2,14 @@
     max-width: 100%;
 }
 
+.card {
+    margin: 7px;
+}
+
 #five-day {
     color: whitesmoke;
-    background-color: #66c2ff;
-    padding: 2px;
+    background-color: #1a1aff;
+    padding: 3px;
 }
 
 .navbar-header {

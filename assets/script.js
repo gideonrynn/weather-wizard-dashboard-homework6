@@ -21,35 +21,42 @@ var cityTemp = $('<div class=temp>');
 var cityHumid = $('<div class=humidity>');
 var cityWindSpeed = $('<div class=wind-speed>');
 var cityUV = $('<div class=uv-index>');
+var cityTime = $('<span class=city-time>');
 
-cityDetails.append(cityName, cityTemp, cityHumid, cityWindSpeed, cityUV);
+cityDetails.append(cityName, cityTime, cityTemp, cityHumid, cityWindSpeed, cityUV);
 
 var fiveDayCityForecast = $('.card-group');
-
  
- ///////////////////
- ///////API calls////
- ///////////////////
+ ///////////////////////////////////
+ ///////Default Chicago API calls////
+ ///////////////////////////////////
  
  //The below will display by default based on Chicago data
- // This is our API key
+
+    // This is the API key
     var APIKey = "&appid=3ccebe214d7b6f05e838f63e5034dcde";
 
     // Set url that will query the database. default is chicago
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
-      "Chicago" + "&units=imperial" + APIKey;
+      "Chicago,us" + "&units=imperial" + APIKey;
 
-    var queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + "Chicago" + "&units=imperial" + APIKey;
+    var queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + "Chicago,us" + "&units=imperial" + APIKey;
 
-    var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=37.75&lon=-122.37";
+    var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=41.88&lon=-87.62";
 
-
+ //////////////////////////////////
+ //When Submit Button Is Clicked///
+ //////////////////////////////////
 
         //when the Submit Button is clicked, run a query that ***adds the city name searched to the 
         var submitBtn = $(".submit-button");
 
         submitBtn.on("click", searchCity);
         
+  //////////////
+ //Functions///
+ /////////////
+
         // get the latitude and longitude of the city being searched
         function queryUV () {
           
@@ -65,13 +72,10 @@ var fiveDayCityForecast = $('.card-group');
             var cityLat = response.coord.lat;
             var cityLon = response.coord.lon;
 
-            console.log("City Latitude = " + cityLat);
-            console.log("City Longitude = " + cityLon);
-
-            //add those
+            //add latitude and longitude to the query request the UV index
             queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=" + cityLat + "&lon=" + cityLon;
 
-            queryUVValue ();
+            queryUVValues ();
     
           //close .then function (response) for ajax call
           });
@@ -79,6 +83,7 @@ var fiveDayCityForecast = $('.card-group');
 
         function searchCity () {
 
+          //clear any existing divs
           fiveDayCityForecast.empty();
 
           //prevent button from triggering default page refresh
@@ -93,13 +98,12 @@ var fiveDayCityForecast = $('.card-group');
             queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&units=imperial" + APIKey;
 
             queryUV ();
-
             runQuery ();
             runForecastQuery ();
             
-
-            $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
-           
+        
+              $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
+            
         }
 
     //create function that will run ajax call and update city details
@@ -118,10 +122,12 @@ var fiveDayCityForecast = $('.card-group');
         cityWindSpeed.text("Wind Speed: " + response.wind.speed + " MPH");
         cityHumid.text("Humidity: " + response.main.humidity + '%');
         cityTemp.text("Temperature: " + response.main.temp + " " + String.fromCharCode(176) + "F");
+        // cityTime.text("Date: " + response.dt.toDateString());
 
         // Converts the temp to Kelvin with the below formula
         var tempF = (response.main.temp - 273.15) * 1.80 + 32;
         $(".tempF").text("Temperature (Kelvin) " + tempF);
+        
 
       //close .then function (response) for ajax call
       });
@@ -131,7 +137,7 @@ var fiveDayCityForecast = $('.card-group');
     }
 
 //pull UV Value from UV query
-function queryUVValue () {
+function queryUVValues () {
 
       // Run AJAX call for current UV for city using OpenWeatherMap API
       $.ajax({
@@ -157,10 +163,29 @@ function runForecastQuery () {
 
      //Store retrieved data inside response object
     .then(function(forecast) {
+    
+    //works when each of the list items contains an i
+     for (var i = 1; i < 40; i++) {
 
-      //works when each of the list items contains an i
-     for (var i = 0; i < 5; i++) {
-      var fiveDayContainer = $('<div class=card>');
+      var currentDate = moment().format('YYYY-MM-DD');
+      var fromNowDate = moment().add(1, 'days').format('YYYY-MM-DD');
+      var fromNowDateTwo = moment().add(2, 'days').format('YYYY-MM-DD');
+      var fromNowDateThree = moment().add(3, 'days').format('YYYY-MM-DD');
+      var fromNowDateFour = moment().add(4, 'days').format('YYYY-MM-DD');
+      var fromNowDateFive = moment().add(5, 'days').format('YYYY-MM-DD');
+
+      var forecastObj = forecast.list[i].dt_txt;
+      var forecastDate = forecastObj.split(' ')[0];
+      console.log(forecastDate);
+      console.log(fromNowDate);
+      // console.log(currentDate);
+      // console.log(fromNowDate == forecastDate);
+      // console.log(fromNowDate === forecastDate);
+      // console.log(fromNowDate > forecastDate);
+      // console.log(fromNowDate < forecastDate);
+
+      //defining all of the elements that will be created 
+      
 
       var fiveDayBody = $('<div class=card-body id=five-day>'); 
 
@@ -170,15 +195,48 @@ function runForecastQuery () {
 
       var fiveDayHumid = $('<div class=card-text id=five-humid>');
 
-      // Transfer data pulled from forecast API into div
-      fiveDayTime.html(forecast.list[i].dt_txt);
-      fiveDayTemp.text("Temperature (F) " + forecast.list[i].main.temp);
-      fiveDayHumid.text("Humidity: " + forecast.list[i].main.humidity + "%");
+      //if date pulled from the forecast object is equal to the next day and a div with a specific day id does not exist, create the forecast card and fill with data from the forecast list
+      if (forecastDate === fromNowDate && $('#Day1').length == 0) {
 
-      fiveDayCityForecast.append(fiveDayContainer);
-      fiveDayContainer.append(fiveDayBody);
-      fiveDayBody.append(fiveDayTime, fiveDayTemp, fiveDayHumid);
+        var fiveDayContainer = $('<div class=card>').attr('id', 'Day1');
 
+        createForecastCard();
+      }
+
+      if (forecastDate === fromNowDateTwo && $('#Day2').length == 0) {
+        var fiveDayContainer = $('<div class=card>').attr('id', 'Day2');
+
+        createForecastCard();
+      }
+
+      if (forecastDate === fromNowDateThree && $('#Day3').length == 0) {
+        var fiveDayContainer = $('<div class=card>').attr('id', 'Day3');
+
+        createForecastCard();
+      }
+
+      if (forecastDate === fromNowDateFour && $('#Day4').length == 0) {
+        var fiveDayContainer = $('<div class=card>').attr('id', 'Day4');
+
+        createForecastCard();
+      }
+
+      if (forecastDate === fromNowDateFive && $('#Day5').length == 0) {
+        var fiveDayContainer = $('<div class=card>').attr('id', 'Day5');
+
+        createForecastCard();
+      }
+
+      function createForecastCard () {
+        
+        fiveDayTime.html(forecast.list[i].dt_txt);
+        fiveDayTemp.text("Temp: " + forecast.list[i].main.temp + " " + String.fromCharCode(176) + "F" );
+        fiveDayHumid.text("Humidity: " + forecast.list[i].main.humidity + "%");
+  
+        fiveDayCityForecast.append(fiveDayContainer);
+        fiveDayContainer.append(fiveDayBody);
+        fiveDayBody.append(fiveDayTime, fiveDayTemp, fiveDayHumid);
+      }
       // // Converts the temp to Kelvin with the below formula
       // var tempF = (forecast.list[i].main.temp - 273.15) * 1.80 + 32;
       // $(".tempF").text("Temperature (Kelvin) " + tempF);
@@ -187,22 +245,10 @@ function runForecastQuery () {
     //close ajax call
   });
 
-  //**may eventually add UV to each of the cards**
-  //   $.ajax({
-  //     url: queryForecastURL,
-  //     method: "GET"
-  //   })
-  //   // We store all of the retrieved data inside of an object called "response"
-  //   .then(function(forecast) {
-
-  //     var fiveDayContainer = $('<div class=card>').append('<div class=card-body');
-
-  //  });
-
 }
 
 
 //at start, the run ajax call that will display city current details and forecast details
 runQuery ();
 runForecastQuery ();
-queryUVValue ();
+queryUVValues ();
