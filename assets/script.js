@@ -26,85 +26,108 @@ var cityTime = $('<span class=city-time>');
 cityDetails.append(cityName, cityTime, cityTemp, cityHumid, cityWindSpeed, cityUV);
 
 var fiveDayCityForecast = $('.card-group');
+
+var currentDate = moment().format('MM-DD-YYYY');
+
+//used a default value (Chicago) in the case that the geolocation does not pull latitude and longitude from the user
+var startValue = "&lat=41.88&lon=-87.62";
  
  ///////////////////////////////////
  ///////Default Chicago API calls////
  ///////////////////////////////////
  
+
  //The below will display by default based on Chicago data
 
-    // This is the API key
-    var APIKey = "&appid=3ccebe214d7b6f05e838f63e5034dcde";
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(displayLocationInfo);
 
-    // Set url that will query the database. default is chicago
-    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
-      "Chicago,us" + "&units=imperial" + APIKey;
+}
 
-    var queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + "Chicago,us" + "&units=imperial" + APIKey;
+function displayLocationInfo(position) {
+  var lng = position.coords.longitude;
+  var lat = position.coords.latitude;
 
-    var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=41.88&lon=-87.62";
+  console.log(' latitude: ' + lat + 'longitude: ' + lng);
+
+  //if latitude and longitude was pulled from the user's location set startValue to their details 
+  if (lng !== "" && lat !== "") {
+    startValue = "&lat=" + lat + "&lon=" + lng;
+  }
+}
+
+// This is the API key
+var APIKey = "&appid=3ccebe214d7b6f05e838f63e5034dcde";
+
+// Set url that will query the database. default is chicago
+var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
+  startValue + "&units=imperial" + APIKey;
+
+var queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + startValue + "&units=imperial" + APIKey;
+
+var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + startValue;
+
 
  //////////////////////////////////
  //When Submit Button Is Clicked///
  //////////////////////////////////
 
-        //when the Submit Button is clicked, run a query that ***adds the city name searched to the 
-        var submitBtn = $(".submit-button");
+  //when the Submit Button is clicked, run a query that ***adds the city name searched to the 
+  var submitBtn = $(".submit-button");
 
-        submitBtn.on("click", searchCity);
+  submitBtn.on("click", searchCity);
         
   //////////////
  //Functions///
  /////////////
 
-        // get the latitude and longitude of the city being searched
-        function queryUV () {
+  // get the latitude and longitude of the city being searched
+  function queryUV () {
           
-          //query 
-          $.ajax({
-            url: queryURL,
-            method: "GET"
-          })
-          //Store retrieved data inside response object
-          .then(function(response) {
+  //query 
+  $.ajax({
+  url: queryURL,
+  method: "GET"
+  })
+  
+  //Store retrieved data inside response object
+  .then(function(response) {
 
-            //pull latitude and longitude from queryURL response object
-            var cityLat = response.coord.lat;
-            var cityLon = response.coord.lon;
+    //pull latitude and longitude from queryURL response object
+    var cityLat = response.coord.lat;
+    var cityLon = response.coord.lon;
 
-            //add latitude and longitude to the query request the UV index
-            queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=" + cityLat + "&lon=" + cityLon;
+    //add latitude and longitude to the query request the UV index
+      queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=" + cityLat + "&lon=" + cityLon;
 
-            queryUVValues ();
+      queryUVValues ();
     
-          //close .then function (response) for ajax call
-          });
-        }
+      //close .then function (response) for ajax call
+      });
+    }
 
-        function searchCity () {
+    function searchCity () {
 
-          //clear any existing divs
-          fiveDayCityForecast.empty();
+    //clear any existing divs
+      fiveDayCityForecast.empty();
 
-          //prevent button from triggering default page refresh
-          event.preventDefault();
-          var citySearch = $('#search').val();
+    //prevent button from triggering default page refresh
+      event.preventDefault();
+      var citySearch = $('#search').val();
          
-          // var citySearchUV = citySearch.text("&lat=" + response.coord.lat + "&lon=" + response.coord.lon);
+      // var citySearchUV = citySearch.text("&lat=" + response.coord.lat + "&lon=" + response.coord.lon);
             
-            queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
-            citySearch + "&units=imperial" + APIKey;
+      queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&units=imperial" + APIKey;
 
-            queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&units=imperial" + APIKey;
+      queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&units=imperial" + APIKey;
 
-            queryUV ();
-            runQuery ();
-            runForecastQuery ();
-            
+      queryUV ();
+      runQuery ();
+      runForecastQuery ();
         
-              $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
+      $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
             
-        }
+    }
 
     //create function that will run ajax call and update city details
     function runQuery () {
@@ -122,7 +145,7 @@ var fiveDayCityForecast = $('.card-group');
         cityWindSpeed.text("Wind Speed: " + response.wind.speed + " MPH");
         cityHumid.text("Humidity: " + response.main.humidity + '%');
         cityTemp.text("Temperature: " + response.main.temp + " " + String.fromCharCode(176) + "F");
-        // cityTime.text("Date: " + response.dt.toDateString());
+        cityTime.text(currentDate);
 
         // Converts the temp to Kelvin with the below formula
         var tempF = (response.main.temp - 273.15) * 1.80 + 32;
@@ -167,7 +190,8 @@ function runForecastQuery () {
     //works when each of the list items contains an i
      for (var i = 1; i < 40; i++) {
 
-      var currentDate = moment().format('YYYY-MM-DD');
+      //defining all of the date elements that will be used to match against the forecast object date
+
       var fromNowDate = moment().add(1, 'days').format('YYYY-MM-DD');
       var fromNowDateTwo = moment().add(2, 'days').format('YYYY-MM-DD');
       var fromNowDateThree = moment().add(3, 'days').format('YYYY-MM-DD');
@@ -176,16 +200,8 @@ function runForecastQuery () {
 
       var forecastObj = forecast.list[i].dt_txt;
       var forecastDate = forecastObj.split(' ')[0];
-      console.log(forecastDate);
-      console.log(fromNowDate);
-      // console.log(currentDate);
-      // console.log(fromNowDate == forecastDate);
-      // console.log(fromNowDate === forecastDate);
-      // console.log(fromNowDate > forecastDate);
-      // console.log(fromNowDate < forecastDate);
 
       //defining all of the elements that will be created 
-      
 
       var fiveDayBody = $('<div class=card-body id=five-day>'); 
 
@@ -229,7 +245,7 @@ function runForecastQuery () {
 
       function createForecastCard () {
         
-        fiveDayTime.html(forecast.list[i].dt_txt);
+        fiveDayTime.html(forecastDate);
         fiveDayTemp.text("Temp: " + forecast.list[i].main.temp + " " + String.fromCharCode(176) + "F" );
         fiveDayHumid.text("Humidity: " + forecast.list[i].main.humidity + "%");
   
@@ -246,7 +262,6 @@ function runForecastQuery () {
   });
 
 }
-
 
 //at start, the run ajax call that will display city current details and forecast details
 runQuery ();
