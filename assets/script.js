@@ -1,21 +1,11 @@
  
- /////////////////////
+ //////////////////////
  //Creating elements//
- ////////////////////
- 
- //set var for Search for a City label text
-//  var searchLabelDiv = "<label class=m-6 style=font-weight:bold>" + "Search for a City" + '</label>';
-
- //create search input with search icon to append to under label in sidebar
-//  var searchInputDiv = $('.search-button-group').append('<input class=form-control type=search id=search>');
-
-//  var searchInputButton = $('.search-button-group').append('<button class=btn btn-primary submit-button type=submit>' + '<span class=fas fa-search-location form-control-feedback>' + '</span>');
- 
-
-//  $('.sidebar').append(searchLabelDiv);
-//  $('.search-button-group').append(searchInputDiv, searchInputButton);
+ /////////////////////
 
 var cityDetails = $('.city-details');
+
+//create variables for primary city display divs and append to 
 var cityName = $('<h5 class=city-name></h5>');
 var cityTemp = $('<div class=temp>');
 var cityHumid = $('<div class=humidity>');
@@ -25,23 +15,23 @@ var cityTime = $('<span class=city-time>');
 
 cityDetails.append(cityName, cityTime, cityTemp, cityHumid, cityWindSpeed, cityUV);
 
+//set var for div into which forecast cards and details will be pulled
 var fiveDayCityForecast = $('.card-group');
 
 var currentDate = moment().format('MM-DD-YYYY');
 
-//used a default value (Chicago) in the case that the geolocation does not pull latitude and longitude from the user
-var startValue = "&lat=41.88&lon=-87.62";
- 
- ///////////////////////////////////
- ///////Default Chicago API calls////
- ///////////////////////////////////
- 
 
- //The below will display by default based on Chicago data
+ ///////////////////////////////////
+ ///////Startup API queries and info////
+ ///////////////////////////////////
+
+ //used a default value (Chicago) in the case that the geolocation does not pull latitude and longitude from the user
+var startValue = "&lat=41.88&lon=-87.62";
+
+ //use geolocation to prompt for and pull user latitude and longtiude information.
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(displayLocationInfo);
-
 }
 
 function displayLocationInfo(position) {
@@ -56,7 +46,7 @@ function displayLocationInfo(position) {
   }
 }
 
-// This is the API key
+// This is my API key/parameter
 var APIKey = "&appid=3ccebe214d7b6f05e838f63e5034dcde";
 
 // Set url that will query the database. default is chicago
@@ -65,7 +55,7 @@ var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" +
 
 var queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + startValue + "&units=imperial" + APIKey;
 
-var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + startValue;
+var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?" + APIKey + startValue;
 
 
  //////////////////////////////////
@@ -97,14 +87,16 @@ var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + startV
     var cityLat = response.coord.lat;
     var cityLon = response.coord.lon;
 
-    //add latitude and longitude to the query request the UV index
+    //add latitude and longitude to the query request for the UV index info
       queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=" + cityLat + "&lon=" + cityLon;
 
       queryUVValues ();
     
       //close .then function (response) for ajax call
       });
-    }
+
+      //close queryUV
+  }
 
     function searchCity () {
 
@@ -147,11 +139,6 @@ var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + startV
         cityHumid.text("Humidity: " + response.main.humidity + '%');
         cityTemp.text("Temperature: " + response.main.temp + " " + String.fromCharCode(176) + "F");
         cityTime.text(currentDate);
-
-        // Converts the temp to Kelvin with the below formula
-        var tempF = (response.main.temp - 273.15) * 1.80 + 32;
-        $(".tempF").text("Temperature (Kelvin) " + tempF);
-        
 
       //close .then function (response) for ajax call
       });
@@ -258,9 +245,7 @@ function runForecastQuery () {
 
     //close ajax call
       });
-
     }
-
 
 
  //////////////////
@@ -268,14 +253,22 @@ function runForecastQuery () {
  /////////////////
 
 var cityList = [];
+
+console.log(cityList);
 //on click, call function which processes through each text area, grabs the value, and pushes it to the array
 function addInputArray () {
-  cityList = [];
+
+  if (cityList === null) {
+    cityList = [];
+  }
 
   $("#search").each( function() {
-     var t = $(this).val()
-     cityList.push({input: t});
-     console.log("value of t is " + t);
+     var cityNameSearched = $(this).val();
+     console.log("This is the cityNameSearched " + cityNameSearched);
+     console.log(cityList);
+     cityList.push({input: cityNameSearched});
+     console.log("value of cityNameSearched is " + cityNameSearched);
+     console.log(cityList);
   })
 
   //run saveToLocal function below
@@ -292,15 +285,22 @@ function saveToLocalStorage () {
 //pull all items from local storage to display user appointment inputs at startup
 function getFromLocal () {
 
-  var str = localStorage.getItem('cityList');
-  cityList = JSON.parse(str);
+  cityList = JSON.parse(localStorage.getItem('cityList'));
 
-  $(".list-group-item").each( function(i) {
-        if (cityList !== null) {
-          $(".list-group-item").append('<li class=list-group-item>' + cityList[i] + '</li>');
-        }
-        })
+  if (cityList !== null) {
+  for (var i = 0; i < cityList.length; i++) {
+      var cities = cityList;
+      console.log(cities);
 
+     
+      li = $('<li class=list-group-item>' + cities[i].input + '</li>');
+      $(".list-group").append(li);
+
+      }
+  }
+
+
+  
   
 
       // $("textarea").each( function(i) {
@@ -316,3 +316,4 @@ function getFromLocal () {
 runQuery ();
 runForecastQuery ();
 queryUVValues ();
+getFromLocal ();
