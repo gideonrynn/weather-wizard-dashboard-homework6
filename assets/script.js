@@ -126,7 +126,8 @@ var queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + startV
       runForecastQuery ();
         
       $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
-            
+
+      addInputArray();
     }
 
     //create function that will run ajax call and update city details
@@ -252,15 +253,63 @@ function runForecastQuery () {
         fiveDayCityForecast.append(fiveDayContainer);
         fiveDayContainer.append(fiveDayBody);
         fiveDayBody.append(fiveDayTime, fiveDayTemp, fiveDayHumid);
+        }
       }
-      // // Converts the temp to Kelvin with the below formula
-      // var tempF = (forecast.list[i].main.temp - 273.15) * 1.80 + 32;
-      // $(".tempF").text("Temperature (Kelvin) " + tempF);
-    }
 
     //close ajax call
-  });
+      });
 
+    }
+
+
+
+ //////////////////
+ ///Local Storage///
+ /////////////////
+
+var cityList = [];
+//on click, call function which processes through each text area, grabs the value, and pushes it to the array
+function addInputArray () {
+  cityList = [];
+
+  $("#search").each( function() {
+     var t = $(this).val()
+     cityList.push({input: t});
+     console.log("value of t is " + t);
+  })
+
+  //run saveToLocal function below
+  saveToLocalStorage();
+}
+
+//save list of inputs to localStorage
+function saveToLocalStorage () {     
+  var str = JSON.stringify(cityList);
+  localStorage.setItem('cityList', str);
+  
+}
+
+//pull all items from local storage to display user appointment inputs at startup
+function getFromLocal () {
+
+  var str = localStorage.getItem('cityList');
+  cityList = JSON.parse(str);
+
+  $(".list-group-item").each( function(i) {
+        if (cityList !== null) {
+          $(".list-group-item").append('<li class=list-group-item>' + cityList[i] + '</li>');
+        }
+        })
+
+  
+
+      // $("textarea").each( function(i) {
+      //     if (todaysList !== null) {
+      //         var userInput = todaysList[i].input;
+      //         $(this).val(userInput);
+      //     }
+      //     })
+  
 }
 
 //at start, the run ajax call that will display city current details and forecast details
