@@ -23,12 +23,6 @@ var fiveDayCityForecast = $('.card-group');
 var currentDate = moment().format('MM-DD-YYYY');
 
 
- ///////////////////////////////////
- ///Startup API queries and info////
- ///////////////////////////////////
-
- 
-
  // This is my API key/parameter
  var APIKey = "&appid=3ccebe214d7b6f05e838f63e5034dcde";
 
@@ -139,7 +133,7 @@ var currentDate = moment().format('MM-DD-YYYY');
         //close queryUV
     }
 
-//pull UV Value from UV query
+//pull UV Value from UV query lat and long
 function queryUVValues () {
 
       // Run AJAX call for current UV for city using OpenWeatherMap API
@@ -157,6 +151,7 @@ function queryUVValues () {
 
 }
 
+//run query that will match future moments against date in the response object and display forecast cards and info
 function runForecastQuery () {
 
     $.ajax({
