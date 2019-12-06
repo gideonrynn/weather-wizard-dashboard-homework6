@@ -15,7 +15,7 @@ var cityUV = $('<div class=uv-index>');
 var cityTime = $('<span class=city-time>');
 var cityIcon = $('<img class=city-icon>');
 
-cityDetails.append(cityName, cityTime, cityIcon, cityTemp, cityHumid, cityWindSpeed, cityUV);
+cityDetails.append(cityName, cityTime, cityTemp, cityIcon, cityHumid, cityWindSpeed, cityUV);
 
 //set var for div into which forecast cards and details will be pulled
 var fiveDayCityForecast = $('.card-group');
