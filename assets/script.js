@@ -12,8 +12,9 @@ var cityHumid = $('<div class=humidity>');
 var cityWindSpeed = $('<div class=wind-speed>');
 var cityUV = $('<div class=uv-index>');
 var cityTime = $('<span class=city-time>');
+var cityIcon = $('<img class=city-icon>');
 
-cityDetails.append(cityName, cityTime, cityTemp, cityHumid, cityWindSpeed, cityUV);
+cityDetails.append(cityName, cityTime, cityTemp, cityHumid, cityWindSpeed, cityUV, cityIcon);
 
 //set var for div into which forecast cards and details will be pulled
 var fiveDayCityForecast = $('.card-group');
@@ -57,7 +58,7 @@ var queryForecastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + s
 
 var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?" + APIKey + startValue;
 
-
+var citySearch = "";
  //////////////////////////////////
  //When Submit Button Is Clicked///
  //////////////////////////////////
@@ -65,12 +66,21 @@ var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?" + APIKey + start
   //when the Submit Button is clicked, run a query that ***adds the city name searched to the 
   var submitBtn = $(".submit-button");
 
-  submitBtn.on("click", searchCity);
+  submitBtn.on("click", function () {
+    citySearch = $('#search').val();
+    searchCity ();
+  });
+
+  //does not work currently - meant to grab the value of the div and pull into the citySearch variable to run the searchCity function
+  // $('li').on("click", function () {
+  //   citySearch = $(this).val();
+  //   console.log(citySearch);
+  //   searchCity ();
+  // })
         
   //////////////
  //Functions///
  /////////////
-
 
     function searchCity () {
 
@@ -79,9 +89,6 @@ var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?" + APIKey + start
 
     //prevent button from triggering default page refresh
       event.preventDefault();
-      var citySearch = $('#search').val();
-         
-      // var citySearchUV = citySearch.text("&lat=" + response.coord.lat + "&lon=" + response.coord.lon);
             
       queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&units=imperial" + APIKey;
 
@@ -91,7 +98,7 @@ var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?" + APIKey + start
       runQuery ();
       runForecastQuery ();
         
-      $('.list-group').append('<li class=list-group-item>' + citySearch + '</li>');
+      $('.list-group').append('<li class=list-group-item>' + '<a href=#>' + citySearch + '</a>' + '</li>');
 
       addInputArray();
     }
@@ -107,12 +114,14 @@ var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?" + APIKey + start
        //Store retrieved data inside response object
       .then(function(response) {
 
+        console.log(response);
         // Transfer content to HTML
         cityName.html("<h1>" + response.name);
         cityWindSpeed.text("Wind Speed: " + response.wind.speed + " MPH");
         cityHumid.text("Humidity: " + response.main.humidity + '%');
         cityTemp.text("Temperature: " + response.main.temp + " " + String.fromCharCode(176) + "F");
         cityTime.text(currentDate);
+        cityIcon.attr('src', "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png");
 
       //close .then function (response) for ajax call
       });
@@ -201,6 +210,8 @@ function runForecastQuery () {
 
       var fiveDayHumid = $('<div class=card-text id=five-humid>');
 
+      var fiveDayIcon = $('<img class=five-icon>');
+
       //if date pulled from the forecast object is equal to the next day and a div with a specific day id does not exist, create the forecast card and fill with data from the forecast list
       if (forecastDate === fromNowDate && $('#Day1').length == 0) {
 
@@ -238,10 +249,14 @@ function runForecastQuery () {
         fiveDayTime.html(forecastDate);
         fiveDayTemp.text("Temp: " + forecast.list[i].main.temp + " " + String.fromCharCode(176) + "F" );
         fiveDayHumid.text("Humidity: " + forecast.list[i].main.humidity + "%");
+        fiveDayIcon.attr('src', "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon + ".png");
+
   
         fiveDayCityForecast.append(fiveDayContainer);
         fiveDayContainer.append(fiveDayBody);
-        fiveDayBody.append(fiveDayTime, fiveDayTemp, fiveDayHumid);
+        fiveDayBody.append(fiveDayTime, fiveDayTemp, fiveDayIcon, fiveDayHumid);
+
+
         }
       }
 
@@ -266,11 +281,7 @@ function addInputArray () {
 
   $("#search").each( function() {
      var cityNameSearched = $(this).val();
-     console.log("This is the cityNameSearched " + cityNameSearched);
-     console.log(cityList);
      cityList.push({input: cityNameSearched});
-     console.log("value of cityNameSearched is " + cityNameSearched);
-     console.log(cityList);
   })
 
   //run saveToLocal function below
@@ -293,9 +304,8 @@ function getFromLocal () {
   for (var i = 0; i < cityList.length; i++) {
       var cities = cityList;
       console.log(cities);
-
      
-      li = $('<li class=list-group-item>' + cities[i].input + '</li>');
+      li = $('<li class=list-group-item>' + '<a href=#>' + cities[i].input + '</a>' + '</li>');
       $(".list-group").append(li);
 
       }
@@ -304,7 +314,7 @@ function getFromLocal () {
 }
 
 //at start, the run ajax call that will display city current details and forecast details
+getFromLocal ();
 runQuery ();
 runForecastQuery ();
 queryUVValues ();
-getFromLocal ();
