@@ -52,7 +52,7 @@ var currentDate = moment().format('MM-DD-YYYY');
   });
 
   // does not work currently - meant to grab the value of the div and pull into the citySearch variable to run the searchCity function
-  $('li').on("click", function () {
+  $('a').on("click", function () {
     citySearch = $(this).val();
     console.log(citySearch);
     searchCity ();
