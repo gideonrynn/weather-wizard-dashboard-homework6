@@ -31,22 +31,6 @@ var startValue = "&lat=41.88&lon=-87.62";
 
  //use geolocation to prompt for and pull user latitude and longtiude information.
 
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(displayLocationInfo);
-}
-
-function displayLocationInfo(position) {
-  var lng = position.coords.longitude;
-  var lat = position.coords.latitude;
-
-  console.log(' latitude: ' + lat + 'longitude: ' + lng);
-
-  //if latitude and longitude was pulled from the user's location set startValue to their details 
-  if (lng !== "" && lat !== "") {
-    startValue = "&lat=" + lat + "&lon=" + lng;
-  }
-}
-
 // This is my API key/parameter
 var APIKey = "&appid=3ccebe214d7b6f05e838f63e5034dcde";
 
@@ -66,7 +50,10 @@ var citySearch = "";
   //when the Submit Button is clicked, run a query that ***adds the city name searched to the 
   var submitBtn = $(".submit-button");
 
-  submitBtn.on("click", function () {
+  submitBtn.on("click", function (event) {
+    //prevent button from triggering default page refresh
+    event.preventDefault();
+
     citySearch = $('#search').val();
     searchCity ();
   });
@@ -84,11 +71,10 @@ var citySearch = "";
 
     function searchCity () {
 
+
     //clear any existing divs
       fiveDayCityForecast.empty();
 
-    //prevent button from triggering default page refresh
-      event.preventDefault();
             
       queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&units=imperial" + APIKey;
 
@@ -278,10 +264,18 @@ function addInputArray () {
   if (cityList === null) {
     cityList = [];
   }
+  
 
   $("#search").each( function() {
      var cityNameSearched = $(this).val();
-     cityList.push({input: cityNameSearched});
+
+     if (cityNameSearched !== null) {
+      cityList.push({input: cityNameSearched});
+     }
+     else {
+       cityList.push({citySearch});
+     }
+     
   })
 
   //run saveToLocal function below
@@ -309,12 +303,19 @@ function getFromLocal () {
       $(".list-group").append(li);
 
       }
+      //get value of last city searched by user in the cityList array, so that it will be displayed on the homepage by default
+      lastCitySearch = cityList[cityList.length - 1];
+      citySearch = Object.values(lastCitySearch);
+      console.log(citySearch);
+
+      searchCity ();
   }
-  
+  else {
+    citySearch = "Chicago";
+    searchCity ();
+  }
 }
 
 //at start, the run ajax call that will display city current details and forecast details
 getFromLocal ();
-runQuery ();
-runForecastQuery ();
-queryUVValues ();
+
