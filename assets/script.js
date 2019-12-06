@@ -22,7 +22,7 @@ var currentDate = moment().format('MM-DD-YYYY');
 
 
  ///////////////////////////////////
- ///////Startup API queries and info////
+ ///Startup API queries and info////
  ///////////////////////////////////
 
  //used a default value (Chicago) in the case that the geolocation does not pull latitude and longitude from the user
@@ -71,32 +71,6 @@ var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?" + APIKey + start
  //Functions///
  /////////////
 
-  // get the latitude and longitude of the city being searched
-  function queryUV () {
-          
-  //query 
-  $.ajax({
-  url: queryURL,
-  method: "GET"
-  })
-  
-  //Store retrieved data inside response object
-  .then(function(response) {
-
-    //pull latitude and longitude from queryURL response object
-    var cityLat = response.coord.lat;
-    var cityLon = response.coord.lon;
-
-    //add latitude and longitude to the query request for the UV index info
-      queryUvURL = "http://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=" + cityLat + "&lon=" + cityLon;
-
-      queryUVValues ();
-    
-      //close .then function (response) for ajax call
-      });
-
-      //close queryUV
-  }
 
     function searchCity () {
 
@@ -145,6 +119,34 @@ var queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?" + APIKey + start
 
 
       //close runQuery function
+    }
+
+    
+  // get the latitude and longitude of the city being searched
+  function queryUV () {
+          
+    //query 
+    $.ajax({
+    url: queryURL,
+    method: "GET"
+    })
+    
+    //Store retrieved data inside response object
+    .then(function(response) {
+  
+      //pull latitude and longitude from queryURL response object
+      var cityLat = response.coord.lat;
+      var cityLon = response.coord.lon;
+  
+      //add latitude and longitude to the query request for the UV index info
+        queryUvURL = "https://api.openweathermap.org/data/2.5/uvi?" + APIKey + "&lat=" + cityLat + "&lon=" + cityLon;
+  
+        queryUVValues ();
+      
+        //close .then function (response) for ajax call
+        });
+  
+        //close queryUV
     }
 
 //pull UV Value from UV query
@@ -298,17 +300,6 @@ function getFromLocal () {
 
       }
   }
-
-
-  
-  
-
-      // $("textarea").each( function(i) {
-      //     if (todaysList !== null) {
-      //         var userInput = todaysList[i].input;
-      //         $(this).val(userInput);
-      //     }
-      //     })
   
 }
 
