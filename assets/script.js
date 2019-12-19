@@ -48,12 +48,13 @@ var currentDate = moment().format('MM-DD-YYYY');
     citySearch = $('#search').val();
     searchCity ();
     $('.list-group').append('<li class=list-group-item>' + '<a href=#>' + citySearch + '</a>' + '</li>');
+
     addInputArray ();
   });
 
-  // does not work currently - meant to grab the value of the div and pull into the citySearch variable to run the searchCity function
-  $('a').on("click", function () {
-    citySearch = $(this).val();
+  // grab the value of the div and pull into the citySearch variable to run the searchCity function
+  $('ul.list-group').on("click", "li", function () {
+    citySearch = $(this).text();
     console.log(citySearch);
     searchCity ();
   })
@@ -92,12 +93,12 @@ var currentDate = moment().format('MM-DD-YYYY');
         console.log(response);
         // Transfer content to HTML
         cityName.html("<h1>" + response.name);
+        cityIcon.attr('src', "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png");
         cityWindSpeed.text("Wind Speed: " + response.wind.speed + " MPH");
         cityHumid.text("Humidity: " + response.main.humidity + '%');
         cityTemp.text("Temperature: " + response.main.temp + " " + String.fromCharCode(176) + "F");
         cityTime.text(currentDate);
-        cityIcon.attr('src', "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png");
-
+        
       //close .then function (response) for ajax call
       });
 
