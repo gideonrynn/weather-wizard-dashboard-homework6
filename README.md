@@ -1,8 +1,19 @@
 # weather-wizard-dashboard-homework6
 This is a Git Hub repository for the NU Coding Bootcamp Homework 6 weather dashboard.
 
+
 ## Purpose
 This weather dashboard can be used for searching current weather and forecast conditions of U.S. cities based on user search.
+
+
+## Screenshot of Completed Application
+
+![dashboard screenshot](./assets/images/weatherdashscreenshot.JPG)
+
+
+## GitHub Pages Link
+
+https://gideonrynn.github.io/weather-wizard-dashboard-homework6/
 
 
 ## Usage
